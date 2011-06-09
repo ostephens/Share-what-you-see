@@ -263,9 +263,6 @@ function createSWYSPost($europeana_url) {
 		
 	}
 	
-//function createSWYSPost($title,$maker,$date,$description,$image,$provider) {
-	
-	
 	$content = "";
 	if (!empty($image)) {
 		$content .= "<a href=\"".$image."\" alt=\"".$title."\" />";
