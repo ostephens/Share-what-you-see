@@ -207,6 +207,41 @@ function mmgInsertObject($object_name,$accession_number,$api_provider, $data_sou
   }
 }
 
+
+function createSWYSPost($object_name,$accession_number,$api_provider, $data_source_url, $source_display_url, $description, $date_earliest, $date_latest, $interpretative_date, $interpretative_place, $image_url, $terms) {
+	$content = "";
+	if (!empty($image_url)) {
+		$content .= "<a href=\"".$image_url."\" alt=\"".$object_name."\" />"
+	}
+	if (!empty($title)) {
+		$content .= "<strong>Title:</strong> ".$object_name."<br />";
+	}
+	if (!empty($description)) {
+		$content .= "<strong>Description:</strong> ".$description."<br />";
+	}
+	$new_post = array(
+		'post_title' => $object_name,
+        'post_content' => wpautop(convert_chars($content)
+        //Default field values will do for the rest - so we don't need to worry about these - see http://codex.wordpress.org/Function_Reference/wp_insert_post
+	)
+	
+	$post_id = wp_insert_post($new_post);
+	
+	if (is_object($post_id)) {
+		//error - what to do?
+		return false;
+	}
+	elseif ($post_id == 0) {
+		//error - what to do?
+		return false;
+	}
+	else {
+		add_post_meta($post_id, 'title', $object_name);
+		//other custom fields here - Institution? Date?
+	}
+	return $post_id;	
+}
+
 function getSingleValue($document,$xpath) {
   $result;
   $nodelist = $document->xpath($xpath);
